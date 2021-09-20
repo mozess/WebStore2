@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-namespace WebStore.Infrastructure.Conventions
+namespace WebStore.Services.Conventions
 {
     public class TestControllersConvention : IControllerModelConvention
     {

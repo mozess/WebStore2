@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace WebStore.Infrastructure.MiddleWare
+namespace WebStore.Services.MiddleWare
 {
     public class TestMiddleWare
     {
