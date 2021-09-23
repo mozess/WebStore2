@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebStore.Domain;
+using WebStore.Domain.DTO;
 using WebStore.Interfaces.Services;
 
 namespace WebStore.WebAPI.Controllers
@@ -29,7 +30,16 @@ namespace WebStore.WebAPI.Controllers
             var section = _ProductData.GetSection(id);
             if (section is null)
                 return NotFound(id);
-            return Ok(section);
+
+            var section_dto = new SectionDTO
+            {
+                Id=section.Id,
+                Name = section.Name,
+                Order = section.Order,
+                ParentId = section.ParentId
+            };
+
+            return Ok(section_dto);
         }
 
         [HttpGet("brands")]
