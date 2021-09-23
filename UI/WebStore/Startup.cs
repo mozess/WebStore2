@@ -90,10 +90,7 @@ namespace WebStore
 
             services.AddScoped<IEmployeesData, SqlEmployeesData>();
             services.AddScoped<ICartService, InCookiesCartService>();
-            //if (Configuration["ProductsDataSource"] == "db")
-            //    services.AddScoped<IProductData, SqlProductData>();
-            //else
-            //    services.AddSingleton<IProductData, InMemoryProductData>();
+            services.AddScoped<IProductData, SqlProductData>();
             services.AddScoped<IOrderService, SqlOrderService>();
 
             services.AddHttpClient("WebStoreAPI", client => client.BaseAddress = new Uri(Configuration["WebAPI"]))
