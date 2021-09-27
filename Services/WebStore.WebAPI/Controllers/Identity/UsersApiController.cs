@@ -26,5 +26,7 @@ namespace WebStore.WebAPI.Controllers.Identity
 
         [HttpGet("all")]
         public async Task<IEnumerable<User>> GetAllUsers() => await _UserStore.Users.ToArrayAsync();
+
+
     }
 }
