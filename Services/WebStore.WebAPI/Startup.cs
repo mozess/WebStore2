@@ -12,7 +12,6 @@ using WebStore.Domain.Entities.Identity;
 using WebStore.Interfaces.Services;
 using WebStore.Services.Data;
 using WebStore.Services.Services.InCookies;
-using WebStore.Services.Services.InMemory;
 using WebStore.Services.Services.InSQL;
 
 
@@ -32,8 +31,7 @@ namespace WebStore.WebAPI
                 case "MSSQL":
                     services.AddDbContext<WebStoreDB>(opt =>
                         opt.UseSqlServer(
-                            Configuration.GetConnectionString("MSSQL")//,
-                            /*o => o.MigrationsAssembly("WebStore.DAL.SqlServer")*/));
+                            Configuration.GetConnectionString("MSSQL")));
                     break;
                 case "Sqlite":
                     services.AddDbContext<WebStoreDB>(opt =>
@@ -45,7 +43,7 @@ namespace WebStore.WebAPI
 
             services.AddTransient<WebStoreDBInitializer>();
 
-            services.AddIdentity<User, Role>(/*opt => { }*/)
+            services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<WebStoreDB>()
                 .AddDefaultTokenProviders();
 
