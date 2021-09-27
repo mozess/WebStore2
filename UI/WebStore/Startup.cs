@@ -49,7 +49,7 @@ namespace WebStore
 
             services.AddTransient<WebStoreDBInitializer>();
 
-            services.AddIdentity<User, Role>(/*opt => { }*/)
+            services.AddIdentity<User, Role>()
                .AddEntityFrameworkStores<WebStoreDB>()
                .AddDefaultTokenProviders();
 
