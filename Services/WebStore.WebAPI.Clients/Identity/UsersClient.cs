@@ -17,7 +17,7 @@ using WebStore.WebAPI.Clients.Base;
 
 namespace WebStore.WebAPI.Clients.Identity
 {
-    class UsersClient:BaseClient,IUsersClient
+    public class UsersClient:BaseClient,IUsersClient
     {
         public UsersClient(HttpClient Client) : base(Client, WebAPIAddresses.Identity.Users) { }
 
@@ -71,7 +71,7 @@ namespace WebStore.WebAPI.Clients.Identity
 
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancel)
         {
-            var response = await PostAsync($"{Address}/User/", user, cancel);
+            var response = await PostAsync($"{Address}/User", user, cancel);
             var creation_success = await response
                 .EnsureSuccessStatusCode()
                 .Content
@@ -85,7 +85,7 @@ namespace WebStore.WebAPI.Clients.Identity
 
         public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancel)
         {
-            var response = await PostAsync($"{Address}/User/", user, cancel);
+            var response = await PutAsync($"{Address}/User", user, cancel);
             var update_success = await response
                 .EnsureSuccessStatusCode()
                 .Content
@@ -254,8 +254,8 @@ namespace WebStore.WebAPI.Clients.Identity
 
         public async Task SetNormalizedEmailAsync(User user, string email, CancellationToken cancel)
         {
-            var response = await PostAsync($"{Address}/User/SetNormalizedEmail/{email}", user, cancel).ConfigureAwait(false);
-            user.NormalizedEmail= await response
+            var response = await PostAsync($"{Address}/SetNormalizedEmail/{email}", user, cancel).ConfigureAwait(false);
+            user.NormalizedEmail = await response
                 .EnsureSuccessStatusCode()
                 .Content
                 .ReadAsStringAsync(cancel)
