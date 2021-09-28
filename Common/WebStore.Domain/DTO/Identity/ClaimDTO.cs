@@ -20,5 +20,7 @@ namespace WebStore.Domain.DTO.Identity
     {
         public Claim Claim { get; init; }
         public Claim NewClaim { get; init; }
+        public IEnumerable<Claim> Claims { get; init; } //не уверен
+
     }
 }
