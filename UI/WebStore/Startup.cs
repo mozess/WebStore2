@@ -33,19 +33,22 @@ namespace WebStore
         {
 
             services.AddIdentity<User, Role>()
-               .AddDefaultTokenProviders();
+                .AddIdentityWebStoreWebAPIClients()
+                .AddDefaultTokenProviders();
 
-            services.AddHttpClient("WebStoreAPIIdentity", client => client.BaseAddress = new(Configuration["WebAPI"]))
-                .AddTypedClient<IUserStore<User>, UsersClient>()
-                .AddTypedClient<IUserRoleStore<User>, UsersClient>()
-                .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
-                .AddTypedClient<IUserEmailStore<User>, UsersClient>()
-                .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
-                .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
-                .AddTypedClient<IUserClaimStore<User>, UsersClient>()
-                .AddTypedClient<IUserLoginStore<User>, UsersClient>()
-                .AddTypedClient<IRoleStore<Role>, RolesClient>()
-                ;
+            //services.AddIdentityWebStoreWebAPIClients();
+
+            //services.AddHttpClient("WebStoreAPIIdentity", client => client.BaseAddress = new(Configuration["WebAPI"]))
+            //    .AddTypedClient<IUserStore<User>, UsersClient>()
+            //    .AddTypedClient<IUserRoleStore<User>, UsersClient>()
+            //    .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
+            //    .AddTypedClient<IUserEmailStore<User>, UsersClient>()
+            //    .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
+            //    .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
+            //    .AddTypedClient<IUserClaimStore<User>, UsersClient>()
+            //    .AddTypedClient<IUserLoginStore<User>, UsersClient>()
+            //    .AddTypedClient<IRoleStore<Role>, RolesClient>()
+            //    ;
 
             services.Configure<IdentityOptions>(opt =>
             {
