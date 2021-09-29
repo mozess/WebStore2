@@ -2,9 +2,7 @@ using System;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,9 +15,8 @@ using WebStore.Interfaces.Services;
 using WebStore.Interfaces.TestAPI;
 using WebStore.Services.Data;
 using WebStore.Services.Services.InCookies;
-using WebStore.Services.Services.InMemory;
-using WebStore.Services.Services.InSQL;
 using WebStore.WebAPI.Clients.Employees;
+using WebStore.WebAPI.Clients.Identity;
 using WebStore.WebAPI.Clients.Orders;
 using WebStore.WebAPI.Clients.Products;
 using WebStore.WebAPI.Clients.Values;
@@ -34,29 +31,21 @@ namespace WebStore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var database_name = Configuration["Database"];
 
-            switch (database_name)
-            {
-                case "MSSQL":
-                    services.AddDbContext<WebStoreDB>(opt =>
-                        opt.UseSqlServer(
-                            Configuration.GetConnectionString("MSSQL")//,
-                            /*o => o.MigrationsAssembly("WebStore.DAL.SqlServer")*/));
-                    break;
-                case "Sqlite":
-                    services.AddDbContext<WebStoreDB>(opt => 
-                        opt.UseSqlite(
-                            Configuration.GetConnectionString("Sqlite"), 
-                            o => o.MigrationsAssembly("WebStore.DAL.Sqlite")));
-                    break;
-            }
-
-            services.AddTransient<WebStoreDBInitializer>();
-
-            services.AddIdentity<User, Role>(/*opt => { }*/)
-               .AddEntityFrameworkStores<WebStoreDB>()
+            services.AddIdentity<User, Role>()
                .AddDefaultTokenProviders();
+
+            services.AddHttpClient("WebStoreAPIIdentity", client => client.BaseAddress = new(Configuration["WebAPI"]))
+                .AddTypedClient<IUserStore<User>, UsersClient>()
+                .AddTypedClient<IUserRoleStore<User>, UsersClient>()
+                .AddTypedClient<IUserPasswordStore<User>, UsersClient>()
+                .AddTypedClient<IUserEmailStore<User>, UsersClient>()
+                .AddTypedClient<IUserPhoneNumberStore<User>, UsersClient>()
+                .AddTypedClient<IUserTwoFactorStore<User>, UsersClient>()
+                .AddTypedClient<IUserClaimStore<User>, UsersClient>()
+                .AddTypedClient<IUserLoginStore<User>, UsersClient>()
+                .AddTypedClient<IRoleStore<Role>, RolesClient>()
+                ;
 
             services.Configure<IdentityOptions>(opt =>
             {
@@ -101,14 +90,12 @@ namespace WebStore
                 ;
 
 
-            services.AddControllersWithViews(/*opt => opt.Conventions.Add(new TestControllersConvention())*/)
+            services.AddControllersWithViews()
                .AddRazorRuntimeCompilation();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using (var scope = services.CreateScope())
-                scope.ServiceProvider.GetRequiredService<WebStoreDBInitializer>().Initialize();
 
             if (env.IsDevelopment())
             {
@@ -122,17 +109,8 @@ namespace WebStore
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //app.UseMiddleware<TestMiddleWare>();
-
-            app.UseWelcomePage("/WelcomePage");
-
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapGet("/greetings", async context =>
-                //{
-                //    await context.Response.WriteAsync(Configuration["Greetings"]);
-                //});
-
                 endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 using WebStore.Domain.Entities;
+using WebStore.Interfaces;
 using WebStore.Interfaces.Services;
 using WebStore.WebAPI.Clients.Base;
 
@@ -13,7 +10,7 @@ namespace WebStore.WebAPI.Clients.Employees
 {
     public class EmployeesClient:BaseClient,IEmployeesData
     {
-        public EmployeesClient(HttpClient Client) : base(Client, "api/employees") { }
+        public EmployeesClient(HttpClient Client) : base(Client, WebAPIAddresses.Employees) { }
 
         public IEnumerable<Employee> GetAll()
         {
