@@ -7,6 +7,7 @@ using WebStore.Services.Mapping;
 
 namespace WebStore.Services.Services
 {
+    public class CartService:ICartService
     {
         private readonly ICartStore _CartStore;
         private readonly IProductData _ProductData;
